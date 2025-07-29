@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenHIE Game Analytics - Admin Dashboard</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="egpaf-logo">
+                        <div class="logo-placeholder">EGPAF</div>
+                        <div class="logo-text">
+                            <p>Elizabeth Glaser Pediatric AIDS Foundation</p>
+                            <p><strong>Digital Health and Data Analytics Directorate</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-title">
+                    <h1>OpenHIE Game Analytics Dashboard</h1>
+                    <p>Real-time performance tracking and insights</p>
+                </div>
+                <div class="header-actions">
+                    <button id="refresh-btn" class="action-btn">
+                        <span class="icon">🔄</span>
+                        Refresh Data
+                    </button>
+                    <button id="export-btn" class="action-btn">
+                        <span class="icon">📊</span>
+                        Export CSV
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <!-- Summary Cards -->
+            <section class="summary-section">
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="card-icon">👥</div>
+                        <div class="card-content">
+                            <h3>Total Players</h3>
+                            <div class="card-value" id="total-players">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon">✅</div>
+                        <div class="card-content">
+                            <h3>Completed Games</h3>
+                            <div class="card-value" id="completed-games">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon">⭐</div>
+                        <div class="card-content">
+                            <h3>Average Score</h3>
+                            <div class="card-value" id="average-score">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon">🏆</div>
+                        <div class="card-content">
+                            <h3>Highest Score</h3>
+                            <div class="card-value" id="highest-score">-</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <h3>Level Performance Distribution</h3>
+                        <canvas id="performance-chart"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>Score Distribution</h3>
+                        <canvas id="score-distribution-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Leaderboard Section -->
+            <section class="leaderboard-section">
+                <div class="section-header">
+                    <h2>Player Leaderboard</h2>
+                    <p>Ranked by total score (highest to lowest)</p>
+                </div>
+                
+                <div class="leaderboard-container">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Total Score</th>
+                                <th>Level 1</th>
+                                <th>Level 2</th>
+                                <th>Completion Time</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-tbody">
+                            <tr class="loading-row">
+                                <td colspan="8">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Detailed Analytics -->
+            <section class="analytics-section">
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Level 1 Performance</h3>
+                        <div class="performance-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Average Score:</span>
+                                <span class="metric-value" id="level1-avg">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Pass Rate:</span>
+                                <span class="metric-value" id="level1-pass-rate">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>Level 2 Performance</h3>
+                        <div class="performance-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Average Score:</span>
+                                <span class="metric-value" id="level2-avg">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Pass Rate:</span>
+                                <span class="metric-value" id="level2-pass-rate">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>Completion Statistics</h3>
+                        <div class="performance-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Completion Rate:</span>
+                                <span class="metric-value" id="completion-rate">-</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Avg. Time:</span>
+                                <span class="metric-value" id="avg-completion-time">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="admin-footer">
+            <p>Last updated: <span id="last-updated">-</span></p>
+            <p>Data refreshes automatically every 30 seconds</p>
+        </footer>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

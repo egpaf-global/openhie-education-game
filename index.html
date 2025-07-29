@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenHIE Education Game - EGPAF</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://alcdn.msauth.net/browser/2.32.2/js/msal-browser.min.js"></script>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="egpaf-logo">
+                    <div class="logo-placeholder">EGPAF</div>
+                    <div class="logo-text">
+                        <p>Created by Elizabeth Glaser Pediatric AIDS Foundation</p>
+                        <p><strong>Digital Health and Data Analytics Directorate</strong></p>
+                    </div>
+                </div>
+                <h1>OpenHIE Interactive Learning Game</h1>
+                <p class="login-subtitle">Please sign in with your Microsoft 365 account to continue</p>
+            </div>
+            <button id="login-btn" class="login-button" onclick="window.authInstance.login()">
+                <svg class="microsoft-icon" viewBox="0 0 23 23">
+                    <path fill="#f35325" d="M0 0h11v11H0z"/>
+                    <path fill="#81bc06" d="M12 0h11v11H12z"/>
+                    <path fill="#05a6f0" d="M0 12h11v11H0z"/>
+                    <path fill="#ffba08" d="M12 12h11v11H12z"/>
+                </svg>
+                Sign in with Microsoft 365
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container" class="container" style="display: none;">
+        <header class="header">
+            <div class="logo-section">
+                <div class="egpaf-logo">
+                    <div class="logo-placeholder">EGPAF</div>
+                    <div class="logo-text">
+                        <p>Created by Elizabeth Glaser Pediatric AIDS Foundation</p>
+                        <p><strong>Digital Health and Data Analytics Directorate</strong></p>
+                    </div>
+                </div>
+            </div>
+            <h1>OpenHIE Interactive Learning Game</h1>
+            <div class="level-indicator">
+                <span id="current-level">Level 1</span>
+                <div class="score">Score: <span id="score">0</span></div>
+            </div>
+        </header>
+
+        <main class="game-area">
+            <!-- Level 1: Service Layer Matching -->
+            <div id="level1" class="level active">
+                <div class="instructions">
+                    <h2>Level 1: Match Services to Their Layers</h2>
+                    <p>Drag the services from the right to their appropriate OpenHIE component layers on the left.</p>
+                </div>
+                
+                <div class="game-board">
+                    <div class="drop-zones">
+                        <div class="drop-zone" data-layer="business-domain">
+                            <h3>Business Domain Services</h3>
+                            <p>OpenHIE Component Layer</p>
+                            <div class="drop-area" id="business-drop"></div>
+                        </div>
+                        
+                        <div class="drop-zone" data-layer="registry">
+                            <h3>Registry Services</h3>
+                            <p>OpenHIE Component Layer</p>
+                            <div class="drop-area" id="registry-drop"></div>
+                        </div>
+                        
+                        <div class="drop-zone" data-layer="interoperability">
+                            <h3>Interoperability Service Layer</h3>
+                            <div class="drop-area" id="interop-drop"></div>
+                        </div>
+                        
+                        <div class="drop-zone" data-layer="point-of-service">
+                            <h3>Point of Service</h3>
+                            <div class="drop-area" id="pos-drop"></div>
+                        </div>
+                    </div>
+
+                    <div class="draggable-items">
+                        <h3>Services & Applications</h3>
+                        <div class="items-container">
+                            <div class="draggable-item" draggable="true" data-service="shared-health-record" data-correct-layer="business-domain">
+                                Shared Health Record
+                            </div>
+                            <div class="draggable-item" draggable="true" data-service="emr" data-correct-layer="point-of-service">
+                                EMR
+                            </div>
+                            <div class="draggable-item" draggable="true" data-service="dhis2" data-correct-layer="point-of-service">
+                                Health Management Information Service (DHIS2)
+                            </div>
+                            <div class="draggable-item" draggable="true" data-service="facility-registry" data-correct-layer="registry">
+                                Facility Registry
+                            </div>
+                            <div class="draggable-item" draggable="true" data-service="client-registry" data-correct-layer="registry">
+                                Client Registry
+                            </div>
+                            <div class="draggable-item" draggable="true" data-service="lab-system" data-correct-layer="point-of-service">
+                                Lab System
+                            </div>
+                            <div class="draggable-item" draggable="true" data-service="product-catalogue" data-correct-layer="registry">
+                                Product Catalogue
+                            </div>
+                            <div class="draggable-item" draggable="true" data-service="terminology-service" data-correct-layer="interoperability">
+                                Terminology Service
+                            </div>
+                        </div>
+                        <button id="check-level1" class="check-button" disabled>Check Answers</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level 2: Use Case Matching -->
+            <div id="level2" class="level">
+                <div class="instructions">
+                    <h2>Level 2: Match Use Cases to Services</h2>
+                    <p>Drag each use case to the appropriate service that would handle it.</p>
+                </div>
+                
+                <div class="game-board">
+                    <div class="services-column">
+                        <h3>OpenHIE Services</h3>
+                        <div class="service-target" data-service="shared-health-record">
+                            <h4>Shared Health Record</h4>
+                            <p>Business Domain Service</p>
+                            <div class="target-area" id="shr-target"></div>
+                        </div>
+                        
+                        <div class="service-target" data-service="client-registry">
+                            <h4>Client Registry</h4>
+                            <p>Registry Service</p>
+                            <div class="target-area" id="client-target"></div>
+                        </div>
+                        
+                        <div class="service-target" data-service="facility-registry">
+                            <h4>Facility Registry</h4>
+                            <p>Registry Service</p>
+                            <div class="target-area" id="facility-target"></div>
+                        </div>
+                        
+                        <div class="service-target" data-service="terminology-service">
+                            <h4>Terminology Service</h4>
+                            <p>Interoperability Layer</p>
+                            <div class="target-area" id="terminology-target"></div>
+                        </div>
+                    </div>
+
+                    <div class="use-cases-column">
+                        <h3>Use Cases</h3>
+                        <div class="use-cases-container">
+                            <div class="use-case-item" draggable="true" data-use-case="patient-history" data-correct-service="shared-health-record">
+                                <div class="use-case-number">1</div>
+                                <p>I want to track individual patients clinical history for a country to be able to link to national insurance claims</p>
+                            </div>
+                            
+                            <div class="use-case-item" draggable="true" data-use-case="patient-tracking" data-correct-service="client-registry">
+                                <div class="use-case-number">2</div>
+                                <p>I want to track a unique patient as they move from one facility to the other</p>
+                            </div>
+                            
+                            <div class="use-case-item" draggable="true" data-use-case="facility-reporting" data-correct-service="facility-registry">
+                                <div class="use-case-number">3</div>
+                                <p>I want to uniquely know the facilities that are reporting high viral load results at a molecular lab</p>
+                            </div>
+                            
+                            <div class="use-case-item" draggable="true" data-use-case="terminology-mapping" data-correct-service="terminology-service">
+                                <div class="use-case-number">4</div>
+                                <p>ART Department orders a blood sample and calls it HIV test while the molecular lab do not have HIV test but they use Viral Load test instead. If I want to integrate the data which service should I use?</p>
+                            </div>
+                        </div>
+                        <button id="check-level2" class="check-button" disabled>Check Answers</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="feedback-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="feedback-content"></div>
+                <button id="next-level-btn" class="next-button">Next Level</button>
+                <button id="play-again-btn" class="play-again-button">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
